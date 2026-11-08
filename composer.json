@@ -1,7 +1,4 @@
 {
-  "name": "meryem-amaq/carnet-ofppt-serveur",
-  "description": "Carnet OFPPT – serveur et synchronisation",
-  "type": "project",
   "require": {
     "php": ">=7.4",
     "ext-pdo": "*",
