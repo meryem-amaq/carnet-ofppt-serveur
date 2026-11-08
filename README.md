@@ -62,6 +62,14 @@ location ^~ /carnet/data/ {
 }
 ```
 
+### Déploiement sur Heroku
+Le dépôt inclut un `Procfile` et un `composer.json` préconfigurés pour Heroku :
+1. Connectez votre dépôt GitHub à votre application sur le tableau de bord Heroku.
+2. Déployez la branche `main`.
+> [!WARNING]
+> Heroku utilise un système de fichiers éphémère (*ephemeral filesystem*). À chaque redémarrage du dyno, le fichier SQLite local est réinitialisé. Pour une persistance à long terme en production, préférez un hébergeur PHP avec stockage persistant (Alwaysdata, Hostinger, cPanel, VPS...).
+
+
 ---
 
 ## 💾 Sauvegarde & Sécurité
