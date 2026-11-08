@@ -21,13 +21,15 @@ Installation (5 minutes)
      chown -R www-data:www-data /var/www/html/carnet/data
      chmod 750 /var/www/html/carnet/data
 3. Ouvrez https://votre-domaine/carnet/api.php?action=ping
-   Vous devez voir : {"ok":true,"version":2,"register":true}
+   Vous devez voir : {"ok":true,"version":3,"register":true}
 4. Ouvrez https://votre-domaine/carnet/ : l'écran de connexion s'affiche.
-   Choisissez « Créer un compte » (identifiant + mot de passe de 8 caractères minimum).
-5. Sur la tablette et le téléphone, connectez-vous avec le même identifiant :
+   Compte unique, créé automatiquement au premier lancement :
+       identifiant : amine
+       mot de passe : amine
+   (la création d'autres comptes est désactivée : ALLOW_REGISTER = false dans api.php)
+5. Connectez-vous avec ce compte sur la tablette, le téléphone et l'ordinateur :
    la progression (plan, QCM, examens, textes, pages manuscrites) se synchronise.
-6. Recommandé : une fois votre compte créé, fermez les inscriptions en ouvrant
-   api.php et en remplaçant  const ALLOW_REGISTER = true;  par  false;
+6. Conseillé : changez le mot de passe dans Réglages (roue dentée) › Changer le mot de passe.
 
 Si vous utilisez Nginx (au lieu d'Apache)
 -----------------------------------------
@@ -57,3 +59,16 @@ Voix de lecture
 ---------------
 L'application utilise les voix installées sur l'appareil et choisit
 automatiquement la plus naturelle. Vous pouvez la changer dans Réglages.
+
+En cas d'erreur (par exemple « erreur 500 »)
+--------------------------------------------
+Ouvrez dans le navigateur : https://votre-domaine/carnet/api.php?action=check
+Le diagnostic affiche chaque point vérifié. Une ligne à « false » indique la cause :
+- "pdo_sqlite": false            -> activez l'extension pdo_sqlite (panneau de l'hébergeur,
+                                    rubrique « Version PHP » ou « Extensions PHP »)
+- "dossier_data_inscriptible": false -> donnez au dossier data les droits 755 ou 775
+                                    (ou chown vers l'utilisateur du serveur web)
+- "php_ok": false                -> passez à PHP 7.4 ou plus récent
+Après correction, rechargez le diagnostic : il doit afficher "Tout est prêt.".
+Depuis cette version, l'application affiche aussi le message d'erreur exact dans
+l'écran de connexion.
