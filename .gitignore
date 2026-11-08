@@ -1,0 +1,16 @@
+# SQLite database files
+data/*.sqlite
+data/*.sqlite-journal
+data/*.sqlite-wal
+data/*.sqlite-shm
+*.sqlite
+*.db
+
+# Operating System files
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/

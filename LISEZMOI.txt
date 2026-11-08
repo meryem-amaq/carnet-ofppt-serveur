@@ -1,0 +1,59 @@
+CARNET OFPPT – INSTALLATION SUR VOTRE SERVEUR
+==============================================
+
+Contenu du dossier
+------------------
+  index.html     L'application (fiches, dissertations, quiz, cahier manuscrit)
+  api.php        La sauvegarde : enregistre la progression dans une base SQLite
+  data/          Dossier de la base de données (créé et rempli automatiquement)
+  data/.htaccess Interdit l'accès direct à la base sous Apache
+
+Prérequis
+---------
+  - Un hébergement web avec PHP 7.4 ou plus récent
+  - L'extension PDO SQLite activée (pdo_sqlite) : c'est le cas chez la plupart des hébergeurs
+  - De préférence un nom de domaine en HTTPS
+
+Installation (5 minutes)
+------------------------
+1. Copiez tout le dossier sur votre serveur, par exemple dans /var/www/html/carnet/
+2. Donnez au serveur web le droit d'écrire dans le dossier data :
+     chown -R www-data:www-data /var/www/html/carnet/data
+     chmod 750 /var/www/html/carnet/data
+3. Ouvrez https://votre-domaine/carnet/api.php?action=ping
+   Vous devez voir : {"ok":true,"version":2,"register":true}
+4. Ouvrez https://votre-domaine/carnet/ : l'écran de connexion s'affiche.
+   Choisissez « Créer un compte » (identifiant + mot de passe de 8 caractères minimum).
+5. Sur la tablette et le téléphone, connectez-vous avec le même identifiant :
+   la progression (plan, QCM, examens, textes, pages manuscrites) se synchronise.
+6. Recommandé : une fois votre compte créé, fermez les inscriptions en ouvrant
+   api.php et en remplaçant  const ALLOW_REGISTER = true;  par  false;
+
+Si vous utilisez Nginx (au lieu d'Apache)
+-----------------------------------------
+Le fichier .htaccess ne fonctionne pas sous Nginx. Ajoutez dans la configuration :
+
+    location ^~ /carnet/data/ { deny all; return 404; }
+
+Fonctionnement de la sauvegarde
+-------------------------------
+- Tout est d'abord enregistré dans le navigateur : l'application marche même
+  sans réseau dans le train. Dès que la connexion revient, elle envoie les
+  changements au serveur.
+- Pour chaque élément, la version la plus récente gagne.
+- Les mots de passe ne sont jamais stockés en clair : ils sont hachés (bcrypt).
+- Une connexion reste valable 90 jours sur chaque appareil. « Se déconnecter »
+  (Réglages) efface les données de l'appareil ; elles restent sur le serveur.
+- Après 8 essais de mot de passe ratés, la connexion est bloquée 15 minutes.
+- Changer le mot de passe (Réglages) déconnecte vos autres appareils.
+- Utilisez impérativement HTTPS, sinon le mot de passe circule en clair.
+
+Sauvegarde de la base
+---------------------
+Copiez régulièrement le fichier data/carnet.sqlite : il contient les comptes
+et toute la progression.
+
+Voix de lecture
+---------------
+L'application utilise les voix installées sur l'appareil et choisit
+automatiquement la plus naturelle. Vous pouvez la changer dans Réglages.
